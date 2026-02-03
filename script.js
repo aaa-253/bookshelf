@@ -24,15 +24,15 @@ window.addBook = function() {
     const ratingInput = document.querySelector('input[name="rating"]:checked');
     
     if (!titleInput || !titleInput.value) {
-        alert("本のタイトルを入力してください");
+        alert("タイトルを入力してください");
         return;
     }
 
     books.push({
         id: Date.now(),
         title: titleInput.value,
-        author: authorInput.value || "Unknown Author",
-        memo: memoInput.value || "No thoughts recorded.",
+        author: authorInput.value || "Unknown",
+        memo: memoInput.value || "",
         emotion: emoInput.value,
         emotionName: emoInput.getAttribute('data-name'),
         rating: parseInt(ratingInput ? ratingInput.value : 3),
@@ -41,12 +41,10 @@ window.addBook = function() {
     });
 
     saveAndRender();
-
-    // 入力クリア
     titleInput.value = "";
     authorInput.value = "";
     memoInput.value = "";
-    document.getElementById("star3").checked = true; // 星3にリセット
+    document.getElementById("star3").checked = true;
     selectedImageData = null;
     document.getElementById("preview-display").innerHTML = `<span class="icon">📸</span><p>Cover Image</p>`;
 }
@@ -59,37 +57,31 @@ function render() {
 
     books.forEach((book, index) => {
         const card = document.createElement("div");
-        card.className = `book-card ${book.status}`;
-        
+        card.className = "book-card";
         const coverContent = book.cover 
             ? `<img src="${book.cover}" class="book-cover-img">`
             : `<div class="no-cover" style="background:${book.emotion}">${book.title[0]}</div>`;
-
         const stars = "★".repeat(book.rating) + "☆".repeat(5 - book.rating);
 
         card.innerHTML = `
             <div class="cover-wrapper" onclick="toggleStatus(${index})">
                 ${coverContent}
-                <div class="memo-overlay">${book.memo}</div>
             </div>
             <div class="book-rating">${stars}</div>
             <div class="book-title">${book.title}</div>
             <div class="book-author">${book.author}</div>
             <div class="book-meta">
-                <span class="status-tag">${getStatusText(book.status)}</span>
                 <span class="vibe-tag" style="background:${book.emotion}">${book.emotionName}</span>
             </div>
             <button class="del-btn" onclick="deleteBook(${index})">✕</button>
         `;
         shelf.appendChild(card);
     });
-    updateHeatmap();
 }
 
-window.toggleStatus = function(index) {
-    const states = ["unread", "reading", "done"];
-    books[index].status = states[(states.indexOf(books[index].status) + 1) % states.length];
-    saveAndRender();
+function saveAndRender() {
+    localStorage.setItem("color-log-v4", JSON.stringify(books));
+    render();
 }
 
 window.deleteBook = function(index) {
@@ -97,29 +89,4 @@ window.deleteBook = function(index) {
         books.splice(index, 1);
         saveAndRender();
     }
-}
-
-function updateHeatmap() {
-    const heatmap = document.getElementById("heatmap");
-    if (!heatmap) return;
-    heatmap.innerHTML = "";
-    if (books.length === 0) return;
-    const counts = books.reduce((acc, b) => { acc[b.emotion] = (acc[b.emotion] || 0) + 1; return acc; }, {});
-    Object.entries(counts).forEach(([color, count]) => {
-        const bar = document.createElement("div");
-        bar.className = "heatmap-bar";
-        bar.style.width = `${(count / books.length) * 100}%`;
-        bar.style.backgroundColor = color;
-        heatmap.appendChild(bar);
-    });
-}
-
-function getStatusText(s) {
-    const map = { unread: "TBR", reading: "READING", done: "DONE" };
-    return map[s];
-}
-
-function saveAndRender() {
-    localStorage.setItem("color-log-v4", JSON.stringify(books));
-    render();
 }
