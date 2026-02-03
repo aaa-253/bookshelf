@@ -28,7 +28,7 @@
             <div class="form-main">
                 <input id="title" type="text" placeholder="本のタイトル" maxlength="40">
                 <input id="author" type="text" placeholder="著者名" maxlength="30">
-                <textarea id="memo" placeholder="一言メモ" maxlength="100"></textarea>
+                <textarea id="memo" placeholder="一言メモ（マウスを置くと表示されます）" maxlength="100"></textarea>
                 
                 <div class="rating-section">
                     <p class="section-label">Rating</p>
@@ -58,9 +58,9 @@
     </section>
  
     <main>
-        <div class="section-header">
-            <h2>Bookshelf</h2>
-            <span id="book-count">0 books</span>
+        <div class="section-header" style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 20px;">
+            <h2 style="font-size: 1.2rem; font-weight: 700;">Bookshelf</h2>
+            <span id="book-count" style="font-size: 0.8rem; color: #888;">0 books</span>
         </div>
         <div id="bookshelf" class="bookshelf"></div>
     </main>
