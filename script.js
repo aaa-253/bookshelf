@@ -32,7 +32,7 @@ window.addBook = function() {
         id: Date.now(),
         title: titleInput.value,
         author: authorInput.value || "Unknown",
-        memo: memoInput.value || "No thoughts recorded.",
+        memo: memoInput.value || "",
         emotion: emoInput.value,
         emotionName: emoInput.getAttribute('data-name'),
         rating: parseInt(ratingInput ? ratingInput.value : 3),
@@ -58,17 +58,14 @@ function render() {
     books.forEach((book, index) => {
         const card = document.createElement("div");
         card.className = "book-card";
-        
         const coverContent = book.cover 
             ? `<img src="${book.cover}" class="book-cover-img">`
             : `<div class="no-cover" style="background:${book.emotion}">${book.title[0]}</div>`;
-
         const stars = "★".repeat(book.rating) + "☆".repeat(5 - book.rating);
 
         card.innerHTML = `
             <div class="cover-wrapper" onclick="toggleStatus(${index})">
                 ${coverContent}
-                <div class="memo-overlay">${book.memo}</div>
             </div>
             <div class="book-rating">${stars}</div>
             <div class="book-title">${book.title}</div>
@@ -82,10 +79,9 @@ function render() {
     });
 }
 
-window.toggleStatus = function(index) {
-    const states = ["unread", "reading", "done"];
-    books[index].status = states[(states.indexOf(books[index].status) + 1) % states.length];
-    saveAndRender();
+function saveAndRender() {
+    localStorage.setItem("color-log-v4", JSON.stringify(books));
+    render();
 }
 
 window.deleteBook = function(index) {
@@ -93,9 +89,4 @@ window.deleteBook = function(index) {
         books.splice(index, 1);
         saveAndRender();
     }
-}
-
-function saveAndRender() {
-    localStorage.setItem("color-log-v4", JSON.stringify(books));
-    render();
 }
