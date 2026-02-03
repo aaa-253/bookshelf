@@ -24,28 +24,30 @@ window.addBook = function() {
     const ratingInput = document.querySelector('input[name="rating"]:checked');
     
     if (!titleInput || !titleInput.value) {
-        alert("タイトルを入力してください");
+        alert("本のタイトルを入力してください");
         return;
     }
 
-    books.push({
+    const newBook = {
         id: Date.now(),
         title: titleInput.value,
-        author: authorInput.value || "Unknown",
-        memo: memoInput.value || "No memo recorded.",
+        author: authorInput.value || "Unknown Author",
+        memo: memoInput.value || "No thoughts recorded.",
         emotion: emoInput.value,
         emotionName: emoInput.getAttribute('data-name'),
         rating: parseInt(ratingInput ? ratingInput.value : 3),
         status: "unread",
         cover: selectedImageData
-    });
+    };
 
+    books.push(newBook);
     saveAndRender();
 
+    // 入力フォームをクリア
     titleInput.value = "";
     authorInput.value = "";
     memoInput.value = "";
-    document.getElementById("star3").checked = true;
+    document.getElementById("star3").checked = true; // デフォルトを星3に
     selectedImageData = null;
     document.getElementById("preview-display").innerHTML = `<span class="icon">📸</span><p>Cover Image</p>`;
 }
@@ -61,24 +63,25 @@ function render() {
         card.className = `book-card ${book.status}`;
         
         const coverContent = book.cover 
-            ? `<img src="${book.cover}" class="book-cover-img">`
+            ? `<img src="${book.cover}" class="book-cover-img" alt="${book.title}">`
             : `<div class="no-cover" style="background:${book.emotion}">${book.title[0]}</div>`;
 
-        const stars = "★".repeat(book.rating) + "☆".repeat(5 - book.rating);
+        // 星評価の生成（満点5）
+        const starHTML = `<div class="book-rating">${"★".repeat(book.rating)}${"☆".repeat(5 - book.rating)}</div>`;
 
         card.innerHTML = `
-            <div class="cover-wrapper" onclick="toggleStatus(${index})">
+            <div class="cover-wrapper" onclick="toggleStatus(${index})" title="Click to change status">
                 ${coverContent}
                 <div class="memo-overlay">${book.memo}</div>
             </div>
-            <div class="book-rating">${stars}</div>
+            ${starHTML}
             <div class="book-title">${book.title}</div>
             <div class="book-author">${book.author}</div>
             <div class="book-meta">
                 <span class="status-tag">${getStatusText(book.status)}</span>
                 <span class="vibe-tag" style="background:${book.emotion}">${book.emotionName}</span>
             </div>
-            <button class="del-btn" onclick="deleteBook(${index})">✕</button>
+            <button class="del-btn" onclick="deleteBook(${index})" title="Delete">✕</button>
         `;
         shelf.appendChild(card);
     });
@@ -87,12 +90,13 @@ function render() {
 
 window.toggleStatus = function(index) {
     const states = ["unread", "reading", "done"];
-    books[index].status = states[(states.indexOf(books[index].status) + 1) % states.length];
+    let currentPos = states.indexOf(books[index].status);
+    books[index].status = states[(currentPos + 1) % states.length];
     saveAndRender();
 }
 
 window.deleteBook = function(index) {
-    if(confirm("このデータを削除しますか？")) {
+    if(confirm("この読書記録を削除してもよろしいですか？")) {
         books.splice(index, 1);
         saveAndRender();
     }
@@ -103,7 +107,12 @@ function updateHeatmap() {
     if (!heatmap) return;
     heatmap.innerHTML = "";
     if (books.length === 0) return;
-    const counts = books.reduce((acc, b) => { acc[b.emotion] = (acc[b.emotion] || 0) + 1; return acc; }, {});
+
+    const counts = books.reduce((acc, b) => { 
+        acc[b.emotion] = (acc[b.emotion] || 0) + 1; 
+        return acc; 
+    }, {});
+
     Object.entries(counts).forEach(([color, count]) => {
         const bar = document.createElement("div");
         bar.className = "heatmap-bar";
@@ -115,7 +124,7 @@ function updateHeatmap() {
 
 function getStatusText(s) {
     const map = { unread: "TBR", reading: "READING", done: "DONE" };
-    return map[s];
+    return map[s] || "TBR";
 }
 
 function saveAndRender() {
