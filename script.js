@@ -90,3 +90,4 @@ window.deleteBook = function(index) {
         saveAndRender();
     }
 }
+
