@@ -3,126 +3,103 @@
 :root {
  --bg: #f8f9fa;
  --accent: #1a1a1a;
- --shadow: 0 20px 40px rgba(0,0,0,0.06);
+ --shadow: 0 10px 30px rgba(0,0,0,0.08);
  --star-color: #ffca28;
- --border-color: #d0d7de; /* GitHub風のグレー */
+ --border-color: #d0d7de;
 }
 
 body {
  font-family: 'Inter', 'Noto Sans JP', sans-serif;
  background-color: var(--bg);
- display: flex; justify-content: center;
+ display: flex; 
+ justify-content: center;
+ min-height: 100vh;
 }
 
-.app-container { width: 100%; max-width: 900px; padding: 40px 20px; }
+.app-container { width: 100%; max-width: 800px; padding: 40px 20px; }
 
-/* 入力カードの基本設定 */
+header h1 { font-size: 1.5rem; margin-bottom: 30px; text-align: center; }
+
 .input-card {
- background: white; border-radius: 24px; padding: 25px;
- display: grid; grid-template-columns: 160px 1fr; gap: 25px;
- box-shadow: var(--shadow); margin-bottom: 60px;
+ background: white; border-radius: 16px; padding: 25px;
+ display: grid; grid-template-columns: 180px 1fr; gap: 25px;
+ box-shadow: var(--shadow); margin-bottom: 50px;
 }
 
-/* アップロードエリアのデザイン修正 */
+/* GitHubスタイルのアップロードエリア */
 .upload-container {
     border: 1.5px dashed var(--border-color);
-    border-radius: 12px;
+    border-radius: 8px;
     background-color: #f6f8fa;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s ease;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-}
-
-.upload-container:hover {
-    border-color: #8c959f;
-    background-color: #f3f4f6;
-}
-
-.upload-container input[type="file"] {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    opacity: 0;
-    cursor: pointer;
-    z-index: 2;
-}
-
-.preview-placeholder {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 8px;
-    color: #57606a;
-    pointer-events: none;
+    justify-content: center;
+    cursor: pointer;
+    position: relative;
+    min-height: 200px;
+    transition: 0.2s;
 }
 
-.camera-icon-svg {
-    color: #8c959f;
+.upload-container:hover { border-color: #8c959f; background-color: #f3f4f6; }
+
+.upload-container input[type="file"] {
+    position: absolute; width: 100%; height: 100%; opacity: 0; cursor: pointer;
 }
 
-.upload-text {
-    font-size: 0.65rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-}
+.preview-placeholder { text-align: center; color: #57606a; pointer-events: none; }
+.camera-icon-svg { margin-bottom: 10px; color: #8c959f; }
+.upload-text { font-size: 11px; font-weight: 700; text-transform: uppercase; }
 
-.preview-image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 10px;
-}
+.preview-image { width: 100%; height: 100%; object-fit: cover; border-radius: 8px; }
 
-/* Rating部分：横並び設定 */
-.star-rating {
- display: flex !important;
- flex-direction: row-reverse !important;
- justify-content: flex-end !important;
- width: fit-content !important;
- gap: 5px;
- margin: 5px 0 15px 0;
-}
-
-.star-rating input { display: none !important; }
-
-.star-rating label {
- cursor: pointer;
- color: #e0e0e0;
- font-size: 1.8rem;
- line-height: 1;
- display: inline-block !important;
-}
-
-.star-rating input:checked ~ label,
-.star-rating label:hover,
-.star-rating label:hover ~ label {
- color: var(--star-color);
-}
-
-/* 他のフォーム要素 */
-.section-label { font-size: 0.65rem; font-weight: 700; color: #bbb; text-transform: uppercase; margin-bottom: 5px; }
+/* フォーム調整 */
 .form-main input, .form-main textarea {
- width: 100%; border: none; border-bottom: 1px solid #eee; padding: 10px 0;
- outline: none; margin-bottom: 10px; }
-.emotion-palette { display: flex; gap: 8px; margin-bottom: 20px; }
-.emo-item input { display: none; }
-.chip { display: block; height: 5px; background: var(--c); border-radius: 3px; opacity: 0.2; margin-bottom: 4px; }
-.emo-item input:checked + .chip { opacity: 1; }
-.submit-btn { width: 100%; padding: 14px; background: var(--accent); color: white; border: none; border-radius: 12px; font-weight: 700; cursor: pointer; }
+ width: 100%; border: none; border-bottom: 1px solid #eee; padding: 12px 0;
+ outline: none; margin-bottom: 15px; font-size: 14px;
+}
 
-/* 本棚 */
-.bookshelf { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 30px; }
-.book-rating { color: var(--star-color); font-size: 0.75rem; margin-bottom: 4px; letter-spacing: 1px; }
-.cover-wrapper { aspect-ratio: 2/3; border-radius: 10px; overflow: hidden; box-shadow: 0 8px 20px rgba(0,0,0,0.08); margin-bottom: 10px; position: relative; }
+.section-label { font-size: 10px; font-weight: 700; color: #aaa; text-transform: uppercase; margin: 10px 0 5px; }
+
+/* Rating */
+.star-rating { display: flex; flex-direction: row-reverse; justify-content: flex-end; gap: 4px; }
+.star-rating input { display: none; }
+.star-rating label { cursor: pointer; color: #e0e0e0; font-size: 24px; }
+.star-rating input:checked ~ label, .star-rating label:hover, .star-rating label:hover ~ label { color: var(--star-color); }
+
+/* Vibe */
+.emotion-palette { display: flex; gap: 10px; margin-bottom: 25px; }
+.emo-item { cursor: pointer; text-align: center; flex: 1; }
+.emo-item input { display: none; }
+.chip { display: block; height: 6px; background: var(--c); border-radius: 3px; opacity: 0.2; margin-bottom: 4px; }
+.emo-item input:checked + .chip { opacity: 1; }
+.emo-name { font-size: 10px; font-weight: 500; color: #666; }
+
+.submit-btn { 
+    width: 100%; padding: 14px; background: var(--accent); color: white; 
+    border: none; border-radius: 8px; font-weight: 700; cursor: pointer; transition: 0.2s;
+}
+.submit-btn:hover { opacity: 0.9; }
+
+/* 本棚レイアウト */
+.section-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 20px; }
+.bookshelf { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 25px; }
+.book-card { position: relative; }
+.cover-wrapper { aspect-ratio: 2/3; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.1); margin-bottom: 10px; background: #eee; }
 .book-cover-img { width: 100%; height: 100%; object-fit: cover; }
-.no-cover { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: white; font-size: 2.2rem; }
-.book-title { font-size: 0.9rem; font-weight: 700; }
-.book-author { font-size: 0.75rem; color: #888; }
-.vibe-tag { font-size: 0.55rem; color: white; padding: 2px 8px; border-radius: 4px; }
-.del-btn { position: absolute; top: 4px; right: 4px; background: white; border: none; width: 24px; height: 24px; border-radius: 50%; cursor: pointer; display: none; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-.book-card:hover .del-btn { display: block; }
+.book-title { font-size: 13px; font-weight: 700; margin-bottom: 2px; }
+.book-author { font-size: 11px; color: #666; margin-bottom: 5px; }
+.vibe-tag { font-size: 9px; color: white; padding: 2px 6px; border-radius: 3px; }
+
+.del-btn { 
+    position: absolute; top: -5px; right: -5px; background: #ff4d4d; color: white;
+    border: none; width: 20px; height: 20px; border-radius: 50%; font-size: 10px;
+    cursor: pointer; display: none; z-index: 10;
+}
+.book-card:hover .del-btn { display: flex; align-items: center; justify-content: center; }
+
+/* スマホ対応 */
+@media (max-width: 600px) {
+    .input-card { grid-template-columns: 1fr; }
+    .upload-container { min-height: 150px; }
+}
