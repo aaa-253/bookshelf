@@ -21,7 +21,7 @@ header h1 { font-size: 1.5rem; margin-bottom: 30px; text-align: center; color: v
     cursor: pointer; position: relative; min-height: 200px; transition: 0.2s;
 }
 .upload-container:hover { border-color: #8c959f; background-color: #f3f4f6; }
-.upload-container input[type="file"] { position: absolute; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
+.upload-container input[type="file"] { position: absolute; width: 100%; height: 100%; opacity: 0; cursor: pointer; z-index: 10; }
 .preview-placeholder { text-align: center; color: #57606a; pointer-events: none; }
 .camera-icon-svg { margin-bottom: 10px; color: #8c959f; }
 .upload-text { font-size: 11px; font-weight: 700; text-transform: uppercase; }
@@ -45,23 +45,42 @@ header h1 { font-size: 1.5rem; margin-bottom: 30px; text-align: center; color: v
 
 .submit-btn { width: 100%; padding: 14px; background: var(--accent); color: white; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; }
 
-/* 本棚とメモのオーバーレイ */
-.section-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 20px; }
+/* --- 本棚とメモのホバー設定（強化版） --- */
 .bookshelf { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 25px; }
 .book-card { position: relative; }
-.cover-wrapper { aspect-ratio: 2/3; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.1); margin-bottom: 10px; background: #eee; position: relative; }
-.book-cover-img { width: 100%; height: 100%; object-fit: cover; }
 
-/* ★ 追加：メモのホバーデザイン */
+.cover-wrapper { 
+    aspect-ratio: 2/3; border-radius: 8px; overflow: hidden; 
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1); margin-bottom: 10px; 
+    background: #eee; position: relative; /* 子要素の基準点 */
+}
+
+.book-cover-img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+/* 最初は完全に隠す */
 .memo-overlay {
     position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-    background-color: rgba(0, 0, 0, 0.75); color: white;
+    background-color: rgba(0, 0, 0, 0.8) !important; /* 背景を少し濃く */
+    color: white !important;
     display: flex; align-items: center; justify-content: center;
-    padding: 12px; opacity: 0; transition: opacity 0.3s ease;
-    pointer-events: none; z-index: 5;
+    padding: 15px; 
+    opacity: 0; /* 透明 */
+    visibility: hidden; /* 存在自体を隠す */
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    z-index: 5;
 }
-.cover-wrapper:hover .memo-overlay { opacity: 1; }
-.memo-text { font-size: 0.75rem; line-height: 1.4; text-align: center; word-break: break-all; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 6; -webkit-box-orient: vertical; }
+
+/* ホバーした時に強制的に表示 */
+.cover-wrapper:hover .memo-overlay { 
+    opacity: 1 !important; 
+    visibility: visible !important; 
+}
+
+.memo-text { 
+    font-size: 0.75rem; line-height: 1.5; text-align: center; 
+    color: white !important; margin: 0;
+    display: -webkit-box; -webkit-line-clamp: 6; -webkit-box-orient: vertical; overflow: hidden;
+}
 
 .book-title { font-size: 13px; font-weight: 700; margin-bottom: 2px; }
 .book-author { font-size: 11px; color: #666; }
