@@ -8,23 +8,26 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700&family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
- 
+
 <div class="app-container">
     <header>
         <h1>Reading Color Log</h1>
         <div id="heatmap" class="heatmap-minimal"></div>
     </header>
- 
+
     <section class="input-area">
         <div class="input-card">
             <div class="upload-container" id="drop-area">
                 <input type="file" id="cover-image" accept="image/*" onchange="previewImage(this)">
                 <div id="preview-display" class="preview-placeholder">
-                    <span class="icon">📸</span>
-                    <p>Cover Image</p>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="camera-icon-svg">
+                        <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                        <circle cx="12" cy="13" r="4"></circle>
+                    </svg>
+                    <p class="upload-text">Cover Image</p>
                 </div>
             </div>
- 
+
             <div class="form-main">
                 <input id="title" type="text" placeholder="本のタイトル" maxlength="40">
                 <input id="author" type="text" placeholder="著者名" maxlength="30">
@@ -51,12 +54,12 @@
                         <label class="emo-item"><input type="radio" name="emo" value="#e9c46a" data-name="幸せ"><span class="chip" style="--c:#e9c46a"></span><span class="emo-name">幸せ</span></label>
                     </div>
                 </div>
- 
+
                 <button onclick="addBook()" class="submit-btn">Add to Library</button>
             </div>
         </div>
     </section>
- 
+
     <main>
         <div class="section-header">
             <h2>Bookshelf</h2>
@@ -65,7 +68,7 @@
         <div id="bookshelf" class="bookshelf"></div>
     </main>
 </div>
- 
+
 <script src="script.js" defer></script>
 </body>
 </html>
