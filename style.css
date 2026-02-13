@@ -1,58 +1,114 @@
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --bg: #f8f9fa;
-  --accent: #1a1a1a;
-  --shadow: 0 20px 40px rgba(0,0,0,0.06);
-  --star-color: #ffca28;
+ --bg: #f8f9fa;
+ --accent: #1a1a1a;
+ --shadow: 0 20px 40px rgba(0,0,0,0.06);
+ --star-color: #ffca28;
+ --border-color: #d0d7de; /* GitHub風のグレー */
 }
 
 body {
-  font-family: 'Inter', 'Noto Sans JP', sans-serif;
-  background-color: var(--bg);
-  display: flex; justify-content: center;
+ font-family: 'Inter', 'Noto Sans JP', sans-serif;
+ background-color: var(--bg);
+ display: flex; justify-content: center;
 }
 
 .app-container { width: 100%; max-width: 900px; padding: 40px 20px; }
 
 /* 入力カードの基本設定 */
 .input-card {
-  background: white; border-radius: 24px; padding: 25px;
-  display: grid; grid-template-columns: 160px 1fr; gap: 25px;
-  box-shadow: var(--shadow); margin-bottom: 60px;
+ background: white; border-radius: 24px; padding: 25px;
+ display: grid; grid-template-columns: 160px 1fr; gap: 25px;
+ box-shadow: var(--shadow); margin-bottom: 60px;
 }
 
-/* ★Rating部分：ここを強力に横並びにします★ */
+/* アップロードエリアのデザイン修正 */
+.upload-container {
+    border: 1.5px dashed var(--border-color);
+    border-radius: 12px;
+    background-color: #f6f8fa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+.upload-container:hover {
+    border-color: #8c959f;
+    background-color: #f3f4f6;
+}
+
+.upload-container input[type="file"] {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+    z-index: 2;
+}
+
+.preview-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    color: #57606a;
+    pointer-events: none;
+}
+
+.camera-icon-svg {
+    color: #8c959f;
+}
+
+.upload-text {
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.preview-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+/* Rating部分：横並び設定 */
 .star-rating {
-  display: flex !important;           /* 強制的にFlexboxにする */
-  flex-direction: row-reverse !important; /* 右から左へ並べる（ホバー制御のため） */
-  justify-content: flex-end !important;   /* 左側に寄せる */
-  width: fit-content !important;      /* 中身の幅に合わせる */
-  gap: 5px;
-  margin: 5px 0 15px 0;
+ display: flex !important;
+ flex-direction: row-reverse !important;
+ justify-content: flex-end !important;
+ width: fit-content !important;
+ gap: 5px;
+ margin: 5px 0 15px 0;
 }
 
-.star-rating input {
-  display: none !important; /* ラジオボタンの丸ポチを完全に消す */
-}
+.star-rating input { display: none !important; }
 
 .star-rating label {
-  cursor: pointer;
-  color: #e0e0e0;
-  font-size: 1.8rem;
-  line-height: 1;
-  display: inline-block !important; /* 縦並びを阻止 */
+ cursor: pointer;
+ color: #e0e0e0;
+ font-size: 1.8rem;
+ line-height: 1;
+ display: inline-block !important;
 }
 
 .star-rating input:checked ~ label,
 .star-rating label:hover,
 .star-rating label:hover ~ label {
-  color: var(--star-color);
+ color: var(--star-color);
 }
 
 /* 他のフォーム要素 */
 .section-label { font-size: 0.65rem; font-weight: 700; color: #bbb; text-transform: uppercase; margin-bottom: 5px; }
-.form-main input, .form-main textarea { width: 100%; border: none; border-bottom: 1px solid #eee; padding: 10px 0; outline: none; margin-bottom: 10px; }
+.form-main input, .form-main textarea {
+ width: 100%; border: none; border-bottom: 1px solid #eee; padding: 10px 0;
+ outline: none; margin-bottom: 10px; }
 .emotion-palette { display: flex; gap: 8px; margin-bottom: 20px; }
 .emo-item input { display: none; }
 .chip { display: block; height: 5px; background: var(--c); border-radius: 3px; opacity: 0.2; margin-bottom: 4px; }
@@ -68,5 +124,5 @@ body {
 .book-title { font-size: 0.9rem; font-weight: 700; }
 .book-author { font-size: 0.75rem; color: #888; }
 .vibe-tag { font-size: 0.55rem; color: white; padding: 2px 8px; border-radius: 4px; }
-.del-btn { position: absolute; top: -8px; right: -8px; background: white; border: none; width: 24px; height: 24px; border-radius: 50%; cursor: pointer; display: none; }
+.del-btn { position: absolute; top: 4px; right: 4px; background: white; border: none; width: 24px; height: 24px; border-radius: 50%; cursor: pointer; display: none; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
 .book-card:hover .del-btn { display: block; }
