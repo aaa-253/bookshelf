@@ -1,3 +1,4 @@
+// GitHub環境でも動くように初期化を最適化
 let books = JSON.parse(localStorage.getItem("color-log-v4")) || [];
 let selectedImageData = null;
 
@@ -18,7 +19,10 @@ window.previewImage = function(input) {
        const reader = new FileReader();
        reader.onload = e => {
            selectedImageData = e.target.result;
-           document.getElementById("preview-display").innerHTML = `<img src="${selectedImageData}" class="preview-image">`;
+           const display = document.getElementById("preview-display");
+           if (display) {
+               display.innerHTML = `<img src="${selectedImageData}" class="preview-image">`;
+           }
        };
        reader.readAsDataURL(input.files[0]);
     }
@@ -31,7 +35,7 @@ window.addBook = function() {
    const emoInput = document.querySelector('input[name="emo"]:checked');
    const ratingInput = document.querySelector('input[name="rating"]:checked');
     
-   if (!titleInput || !titleInput.value) {
+   if (!titleInput || !titleInput.value.trim()) {
        alert("タイトルを入力してください");
        return;
     }
@@ -44,45 +48,44 @@ window.addBook = function() {
        emotion: emoInput.value,
        emotionName: emoInput.getAttribute('data-name'),
        rating: parseInt(ratingInput ? ratingInput.value : 3),
-       status: "unread",
        cover: selectedImageData
    });
 
    saveAndRender();
 
-   // 入力後のリセット
+   // リセット
    titleInput.value = "";
    authorInput.value = "";
    memoInput.value = "";
-   document.getElementById("star3").checked = true;
    selectedImageData = null;
-   // 絵文字ではなくSVGに戻す
-   document.getElementById("preview-display").innerHTML = SVG_ICON;
+   const display = document.getElementById("preview-display");
+   if (display) display.innerHTML = SVG_ICON;
 }
 
 function render() {
    const shelf = document.getElementById("bookshelf");
+   const countDisplay = document.getElementById("book-count");
    if (!shelf) return;
+   
    shelf.innerHTML = "";
-   document.getElementById("book-count").innerText = `${books.length} items`;
+   if (countDisplay) countDisplay.innerText = `${books.length} items`;
 
    books.forEach((book, index) => {
        const card = document.createElement("div");
        card.className = "book-card";
        const coverContent = book.cover 
            ? `<img src="${book.cover}" class="book-cover-img">`
-           : `<div class="no-cover" style="background:${book.emotion}">${book.title[0]}</div>`;
+           : `<div class="no-cover" style="background:${book.emotion}; width:100%; height:100%; display:flex; align-items:center; justify-content:center; color:white; font-size:2rem; font-weight:bold;">${book.title[0]}</div>`;
+       
        const stars = "★".repeat(book.rating) + "☆".repeat(5 - book.rating);
 
        card.innerHTML = `
-           <div class="cover-wrapper">
-                ${coverContent}
-                <button class="del-btn" onclick="deleteBook(${index})">✕</button>
-           </div>
-           <div class="book-rating">${stars}</div>
+           <div class="cover-wrapper">${coverContent}</div>
+           <button class="del-btn" onclick="deleteBook(${index})">✕</button>
+           <div style="color:var(--star-color); font-size:10px; margin-bottom:4px;">${stars}</div>
            <div class="book-title">${book.title}</div>
            <div class="book-author">${book.author}</div>
-           <div class="book-meta">
+           <div style="margin-top:5px;">
                 <span class="vibe-tag" style="background:${book.emotion}">${book.emotionName}</span>
            </div>
        `;
