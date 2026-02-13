@@ -47,14 +47,32 @@ function render() {
    if (!shelf) return;
    shelf.innerHTML = "";
    document.getElementById("book-count").innerText = `${books.length} items`;
+   
    books.forEach((book, index) => {
        const card = document.createElement("div");
        card.className = "book-card";
        const coverContent = book.cover 
            ? `<img src="${book.cover}" class="book-cover-img">`
-           : `<div style="background:${book.emotion}; width:100%; height:100%; display:flex; align-items:center; justify-content:center; color:white; font-size:2rem;">${book.title[0]}</div>`;
+           : `<div style="background:${book.emotion}; width:100%; height:100%; display:flex; align-items:center; justify-content:center; color:white; font-size:2rem; font-weight:bold;">${book.title[0]}</div>`;
+       
        const stars = "★".repeat(book.rating) + "☆".repeat(5 - book.rating);
-       card.innerHTML = `<div class="cover-wrapper">${coverContent}</div><button class="del-btn" onclick="deleteBook(${index})">✕</button><div style="color:var(--star-color); font-size:10px; margin-bottom:4px;">${stars}</div><div class="book-title">${book.title}</div><div class="book-author">${book.author}</div><div style="margin-top:5px;"><span class="vibe-tag" style="background:${book.emotion}">${book.emotionName}</span></div>`;
+       
+       // メモをオーバーレイとして追加
+       card.innerHTML = `
+           <div class="cover-wrapper">
+                ${coverContent}
+                <div class="memo-overlay">
+                    <p class="memo-text">${book.memo || "No memo"}</p>
+                </div>
+                <button class="del-btn" onclick="deleteBook(${index})">✕</button>
+           </div>
+           <div style="color:var(--star-color); font-size:10px; margin-bottom:4px;">${stars}</div>
+           <div class="book-title">${book.title}</div>
+           <div class="book-author">${book.author}</div>
+           <div style="margin-top:5px;">
+                <span class="vibe-tag" style="background:${book.emotion}">${book.emotionName}</span>
+           </div>
+       `;
        shelf.appendChild(card);
    });
 }
