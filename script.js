@@ -29,7 +29,7 @@ window.addBook = function() {
        id: Date.now(),
        title: titleInput.value,
        author: authorInput.value || "Unknown",
-       memo: memoInput.value || "",
+       memo: memoInput.value || "", // ここでメモを保存
        emotion: emoInput.value,
        emotionName: emoInput.getAttribute('data-name'),
        rating: parseInt(ratingInput ? ratingInput.value : 3),
@@ -51,18 +51,20 @@ function render() {
    books.forEach((book, index) => {
        const card = document.createElement("div");
        card.className = "book-card";
+       
+       // 画像があるか、ないか（色のついた箱）を判定
        const coverContent = book.cover 
            ? `<img src="${book.cover}" class="book-cover-img">`
-           : `<div style="background:${book.emotion}; width:100%; height:100%; display:flex; align-items:center; justify-content:center; color:white; font-size:2rem; font-weight:bold;">${book.title[0]}</div>`;
+           : `<div style="background:${book.emotion}; width:100%; height:100%; display:flex; align-items:center; justify-content:center; color:white; font-size:2rem; font-weight:bold; overflow:hidden;">${book.title[0]}</div>`;
        
        const stars = "★".repeat(book.rating) + "☆".repeat(5 - book.rating);
        
-       // メモをオーバーレイとして追加
+       // ★重要：画像があろうとなかろうと、この .memo-overlay が作られるようにします
        card.innerHTML = `
            <div class="cover-wrapper">
                 ${coverContent}
                 <div class="memo-overlay">
-                    <p class="memo-text">${book.memo || "No memo"}</p>
+                    <p class="memo-text">${book.memo || "メモはありません"}</p>
                 </div>
                 <button class="del-btn" onclick="deleteBook(${index})">✕</button>
            </div>
